@@ -397,7 +397,7 @@ export default function PaperShowcase() {
             <h3>1. Basic Shapes</h3>
             <p>Rectangle, circle, and star with different colors and properties</p>
             <div className="canvas-container">
-              <canvas ref={canvasRefs.canvas1} width={600} height={300} />
+              <canvas ref={canvasRefs.canvas1} width={600} height={300} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
             <p className="example-note">Shapes with shadows and rounded corners</p>
           </div>
@@ -406,7 +406,7 @@ export default function PaperShowcase() {
             <h3>2. Draggable Elements</h3>
             <p>Drag the circle to move it around the canvas</p>
             <div className="canvas-container">
-              <canvas ref={canvasRefs.canvas2} width={600} height={300} />
+              <canvas ref={canvasRefs.canvas2} width={600} height={300} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
           </div>
 
@@ -414,7 +414,7 @@ export default function PaperShowcase() {
             <h3>3. Rotation & Animation</h3>
             <p>Click the star to rotate it</p>
             <div className="canvas-container clickable">
-              <canvas ref={canvasRefs.canvas3} width={600} height={300} />
+              <canvas ref={canvasRefs.canvas3} width={600} height={300} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
             <p className="example-note">Current rotation: {starRotation}°</p>
           </div>
@@ -445,7 +445,7 @@ export default function PaperShowcase() {
               </div>
             </div>
             <div className="canvas-container">
-              <canvas ref={canvasRefs.canvas4} width={600} height={200} />
+              <canvas ref={canvasRefs.canvas4} width={600} height={200} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
           </div>
         </div>
@@ -457,7 +457,7 @@ export default function PaperShowcase() {
             <h3>5. Transform with Handles (Rotate & Resize)</h3>
             <p>Click on a shape to select it and drag to move</p>
             <div className="canvas-container">
-              <canvas ref={canvasRefs.canvas5} width={600} height={300} />
+              <canvas ref={canvasRefs.canvas5} width={600} height={300} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
             <p className="example-note">
               {selectedItem ? 'Selected object' : 'Click on a shape to select it'}
@@ -500,7 +500,7 @@ export default function PaperShowcase() {
               </div>
             </div>
             <div className="canvas-container">
-              <canvas ref={canvasRefs.canvas6} width={600} height={300} />
+              <canvas ref={canvasRefs.canvas6} width={600} height={300} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
           </div>
 
@@ -518,7 +518,7 @@ export default function PaperShowcase() {
               </button>
             </div>
             <div className="canvas-container">
-              <canvas ref={canvasRefs.canvas7} width={600} height={300} />
+              <canvas ref={canvasRefs.canvas7} width={600} height={300} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
             <p className="example-note">
               Preview export is at 1x scale (web quality), Print export is at 3x scale (high resolution)
