@@ -7,7 +7,7 @@ const nextConfig = {
   },
   // GitHub Pages serves from /repository-name/
   basePath: process.env.NODE_ENV === 'production' ? '/design-tools-showcase' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/design-tools-showcase/' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/design-tools-showcase' : '',
 }
 
 module.exports = nextConfig
