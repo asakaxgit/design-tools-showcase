@@ -26,10 +26,15 @@ export default function PaperShowcase() {
 
   // Load Paper.js dynamically
   useEffect(() => {
-    import('paper').then((module) => {
-      paperRef.current = module.default
-      setPaperLoaded(true)
-    })
+    import('paper')
+      .then((module) => {
+        // Paper.js doesn't have a default export, use the module itself
+        paperRef.current = module
+        setPaperLoaded(true)
+      })
+      .catch((error) => {
+        console.error('Failed to load Paper.js:', error)
+      })
   }, [])
 
   // Initialize all canvases when Paper.js is loaded
@@ -37,13 +42,13 @@ export default function PaperShowcase() {
     if (!paperLoaded || !paperRef.current) return
 
     const paper = paperRef.current
-    const cleanupProjects: any[] = []
+    const projects: any[] = []
 
     // Example 1: Basic Shapes
     if (canvasRefs.canvas1.current) {
-      paper.setup(canvasRefs.canvas1.current)
-      const project1 = paper.project
-      cleanupProjects.push(project1)
+      const project1 = new paper.Project(canvasRefs.canvas1.current)
+      projects.push(project1)
+      project1.activate()
 
       const rect = new paper.Path.Rectangle({
         point: [50, 50],
@@ -71,13 +76,15 @@ export default function PaperShowcase() {
         shadowColor: new paper.Color(0, 0, 0, 0.3),
         shadowBlur: 5
       })
+      
+      project1.view.draw()
     }
 
     // Example 2: Draggable Elements
     if (canvasRefs.canvas2.current) {
-      paper.setup(canvasRefs.canvas2.current)
-      const project2 = paper.project
-      cleanupProjects.push(project2)
+      const project2 = new paper.Project(canvasRefs.canvas2.current)
+      projects.push(project2)
+      project2.activate()
 
       const text = new paper.PointText({
         point: [circlePos.x - 30, circlePos.y - 60],
@@ -98,13 +105,15 @@ export default function PaperShowcase() {
         circle.position = circle.position.add(event.delta)
         text.position = new paper.Point(circle.position.x - 30, circle.position.y - 60)
       }
+      
+      project2.view.draw()
     }
 
     // Example 3: Rotation & Animation
     if (canvasRefs.canvas3.current) {
-      paper.setup(canvasRefs.canvas3.current)
-      const project3 = paper.project
-      cleanupProjects.push(project3)
+      const project3 = new paper.Project(canvasRefs.canvas3.current)
+      projects.push(project3)
+      project3.activate()
 
       const star = new paper.Path.Star({
         center: [300, 150],
@@ -119,14 +128,17 @@ export default function PaperShowcase() {
       star.onMouseDown = () => {
         setStarRotation(prev => prev + 45)
         star.rotate(45)
+        project3.view.draw()
       }
+      
+      project3.view.draw()
     }
 
     // Example 4: Text Rendering
     if (canvasRefs.canvas4.current) {
-      paper.setup(canvasRefs.canvas4.current)
-      const project4 = paper.project
-      cleanupProjects.push(project4)
+      const project4 = new paper.Project(canvasRefs.canvas4.current)
+      projects.push(project4)
+      project4.activate()
 
       new paper.PointText({
         point: [50, 75],
@@ -143,13 +155,15 @@ export default function PaperShowcase() {
         fontFamily: 'Arial',
         fillColor: new paper.Color('#4299e1')
       })
+      
+      project4.view.draw()
     }
 
     // Example 5: Transform with Handles
     if (canvasRefs.canvas5.current) {
-      paper.setup(canvasRefs.canvas5.current)
-      const project5 = paper.project
-      cleanupProjects.push(project5)
+      const project5 = new paper.Project(canvasRefs.canvas5.current)
+      projects.push(project5)
+      project5.activate()
 
       const rect = new paper.Path.Rectangle({
         point: [50, 50],
@@ -186,6 +200,8 @@ export default function PaperShowcase() {
             strokeWidth: 2,
             dashArray: [4, 4]
           })
+          
+          project5.view.draw()
         }
 
         item.onMouseDrag = (event: any) => {
@@ -193,16 +209,19 @@ export default function PaperShowcase() {
           if (selectionBounds) {
             selectionBounds.position = selectionBounds.position.add(event.delta)
           }
+          project5.view.draw()
         }
       })
+      
+      project5.view.draw()
     }
 
     // Example 6: Layer Management
     if (canvasRefs.canvas6.current) {
-      paper.setup(canvasRefs.canvas6.current)
-      const project6 = paper.project
-      cleanupProjects.push(project6)
+      const project6 = new paper.Project(canvasRefs.canvas6.current)
+      projects.push(project6)
       projectsRef.current[6] = project6
+      project6.activate()
 
       const rect = new paper.Path.Rectangle({
         point: [50, 50],
@@ -236,15 +255,18 @@ export default function PaperShowcase() {
 
         item.onMouseDrag = (event: any) => {
           item.position = item.position.add(event.delta)
+          project6.view.draw()
         }
       })
+      
+      project6.view.draw()
     }
 
     // Example 7: Export Canvas
     if (canvasRefs.canvas7.current) {
-      paper.setup(canvasRefs.canvas7.current)
-      const project7 = paper.project
-      cleanupProjects.push(project7)
+      const project7 = new paper.Project(canvasRefs.canvas7.current)
+      projects.push(project7)
+      project7.activate()
 
       new paper.Path.Rectangle({
         point: [50, 50],
@@ -265,10 +287,12 @@ export default function PaperShowcase() {
         radius2: 40,
         fillColor: new paper.Color('#f6ad55')
       })
+      
+      project7.view.draw()
     }
 
     return () => {
-      cleanupProjects.forEach(project => {
+      projects.forEach(project => {
         if (project) {
           project.clear()
           project.remove()
