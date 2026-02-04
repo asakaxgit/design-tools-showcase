@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function Home() {
   return (
     <main className="container">
@@ -23,7 +25,7 @@ export default function Home() {
           <div className="library-card">
             <h3>Konva (react-konva)</h3>
             <p>Canvas-based 2D graphics library with React integration</p>
-            <span className="status">Coming Soon</span>
+            <Link href="/konva" className="card-link">View Showcase →</Link>
           </div>
 
           <div className="library-card">
