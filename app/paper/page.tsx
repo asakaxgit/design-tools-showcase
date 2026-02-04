@@ -4,6 +4,10 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
 export default function PaperShowcase() {
+  const BASE_CANVAS_WIDTH = 600
+  const BASE_CANVAS_HEIGHT = 300
+  const TEXT_CANVAS_HEIGHT = 200
+
   const canvasRefs = {
     canvas1: useRef<HTMLCanvasElement>(null),
     canvas2: useRef<HTMLCanvasElement>(null),
@@ -21,8 +25,33 @@ export default function PaperShowcase() {
   const [text2, setText2] = useState('Styled and positioned text')
   const [selectedItem, setSelectedItem] = useState<any>(null)
   const [paperLoaded, setPaperLoaded] = useState(false)
+  const [canvasScale, setCanvasScale] = useState(1)
+  const firstExampleRef = useRef<HTMLDivElement>(null)
   const paperRef = useRef<any>(null)
   const projectsRef = useRef<any[]>([])
+  const paperScalesRef = useRef<number[]>([])
+
+  useEffect(() => {
+    const updateScale = () => {
+      const exampleWidth = firstExampleRef.current?.clientWidth
+      if (!exampleWidth) return
+      const availableWidth = exampleWidth - 32
+      const scale = Math.min(1, Math.max(availableWidth / (BASE_CANVAS_WIDTH + 20), 0.25))
+      setCanvasScale(scale)
+    }
+
+    updateScale()
+    const observer = new ResizeObserver(updateScale)
+    if (firstExampleRef.current) {
+      observer.observe(firstExampleRef.current)
+    }
+    window.addEventListener('resize', updateScale)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', updateScale)
+    }
+  }, [])
 
   // Load Paper.js dynamically
   useEffect(() => {
@@ -291,6 +320,9 @@ export default function PaperShowcase() {
       project7.view.draw()
     }
 
+    projectsRef.current = projects
+    paperScalesRef.current = new Array(projects.length).fill(1)
+
     return () => {
       projects.forEach(project => {
         if (project) {
@@ -300,6 +332,50 @@ export default function PaperShowcase() {
       })
     }
   }, [paperLoaded, text1, text2])
+
+  /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    if (!paperLoaded || !paperRef.current || projectsRef.current.length === 0) return
+
+    const paper = paperRef.current
+    const baseSizes = [
+      { width: BASE_CANVAS_WIDTH, height: BASE_CANVAS_HEIGHT },
+      { width: BASE_CANVAS_WIDTH, height: BASE_CANVAS_HEIGHT },
+      { width: BASE_CANVAS_WIDTH, height: BASE_CANVAS_HEIGHT },
+      { width: BASE_CANVAS_WIDTH, height: TEXT_CANVAS_HEIGHT },
+      { width: BASE_CANVAS_WIDTH, height: BASE_CANVAS_HEIGHT },
+      { width: BASE_CANVAS_WIDTH, height: BASE_CANVAS_HEIGHT },
+      { width: BASE_CANVAS_WIDTH, height: BASE_CANVAS_HEIGHT },
+    ]
+
+    const canvasList = [
+      canvasRefs.canvas1.current,
+      canvasRefs.canvas2.current,
+      canvasRefs.canvas3.current,
+      canvasRefs.canvas4.current,
+      canvasRefs.canvas5.current,
+      canvasRefs.canvas6.current,
+      canvasRefs.canvas7.current,
+    ]
+
+    baseSizes.forEach((size, index) => {
+      const project = projectsRef.current[index]
+      const canvasEl = canvasList[index]
+      if (!project || !canvasEl) return
+
+      const width = size.width * canvasScale
+      const height = size.height * canvasScale
+      const prevScale = paperScalesRef.current[index] || 1
+
+      canvasEl.width = width
+      canvasEl.height = height
+      project.view.viewSize = new paper.Size(width, height)
+      project.view.scale(canvasScale / prevScale)
+      project.view.update()
+      paperScalesRef.current[index] = canvasScale
+    })
+  }, [canvasScale, paperLoaded])
+  /* eslint-enable react-hooks/exhaustive-deps */
 
   // Layer management functions
   const moveToFront = () => {
@@ -393,7 +469,7 @@ export default function PaperShowcase() {
         <h2>Interactive Examples</h2>
         
         <div className="examples-grid">
-          <div className="example">
+          <div className="example" ref={firstExampleRef}>
             <h3>1. Basic Shapes</h3>
             <p>Rectangle, circle, and star with different colors and properties</p>
             <div className="canvas-container">

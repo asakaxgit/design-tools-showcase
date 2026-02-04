@@ -20,9 +20,15 @@ interface Shape {
 }
 
 export default function KonvaShowcase() {
+  const BASE_CANVAS_WIDTH = 600
+  const BASE_CANVAS_HEIGHT = 300
+  const TEXT_CANVAS_HEIGHT = 200
+
   const [rectColor, setRectColor] = useState('#4299e1')
   const [circlePos, setCirclePos] = useState({ x: 100, y: 200 })
   const [starRotation, setStarRotation] = useState(0)
+  const [canvasScale, setCanvasScale] = useState(1)
+  const firstExampleRef = useRef<HTMLDivElement>(null)
   
   // State for text rendering example
   const [text1, setText1] = useState('Hello from Konva!')
@@ -39,6 +45,28 @@ export default function KonvaShowcase() {
   const transformerRef = useRef<Konva.Transformer>(null)
   const shapeRefs = useRef<{ [key: string]: Konva.Shape }>({})
   const stageRef = useRef<Konva.Stage>(null)
+
+  useEffect(() => {
+    const updateScale = () => {
+      const exampleWidth = firstExampleRef.current?.clientWidth
+      if (!exampleWidth) return
+      const availableWidth = exampleWidth - 32
+      const scale = Math.min(1, Math.max(availableWidth / (BASE_CANVAS_WIDTH + 20), 0.25))
+      setCanvasScale(scale)
+    }
+
+    updateScale()
+    const observer = new ResizeObserver(updateScale)
+    if (firstExampleRef.current) {
+      observer.observe(firstExampleRef.current)
+    }
+    window.addEventListener('resize', updateScale)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', updateScale)
+    }
+  }, [])
 
   // Update transformer when selection changes
   useEffect(() => {
@@ -158,6 +186,11 @@ export default function KonvaShowcase() {
     }
   }
 
+  const stageStyle = (baseHeight: number) => ({
+    width: `${BASE_CANVAS_WIDTH * canvasScale}px`,
+    height: `${baseHeight * canvasScale}px`
+  })
+
   return (
     <main className="container">
       <div className="header">
@@ -184,11 +217,17 @@ export default function KonvaShowcase() {
         <h2>Interactive Examples</h2>
         
         <div className="examples-grid">
-        <div className="example">
+        <div className="example" ref={firstExampleRef}>
           <h3>1. Basic Shapes</h3>
           <p>Rectangle, circle, and star with different colors and properties</p>
           <div className="canvas-container">
-            <Stage width={600} height={300}>
+            <Stage
+              width={BASE_CANVAS_WIDTH}
+              height={BASE_CANVAS_HEIGHT}
+              scaleX={canvasScale}
+              scaleY={canvasScale}
+              style={stageStyle(BASE_CANVAS_HEIGHT)}
+            >
               <Layer>
                 <Rect
                   x={50}
@@ -227,7 +266,13 @@ export default function KonvaShowcase() {
           <h3>2. Draggable Elements</h3>
           <p>Drag the circle to move it around the canvas</p>
           <div className="canvas-container">
-            <Stage width={600} height={300}>
+            <Stage
+              width={BASE_CANVAS_WIDTH}
+              height={BASE_CANVAS_HEIGHT}
+              scaleX={canvasScale}
+              scaleY={canvasScale}
+              style={stageStyle(BASE_CANVAS_HEIGHT)}
+            >
               <Layer>
                 <Text
                   text="Drag me!"
@@ -259,7 +304,13 @@ export default function KonvaShowcase() {
           <h3>3. Rotation & Animation</h3>
           <p>Click the star to rotate it</p>
           <div className="canvas-container clickable">
-            <Stage width={600} height={300}>
+            <Stage
+              width={BASE_CANVAS_WIDTH}
+              height={BASE_CANVAS_HEIGHT}
+              scaleX={canvasScale}
+              scaleY={canvasScale}
+              style={stageStyle(BASE_CANVAS_HEIGHT)}
+            >
               <Layer>
                 <Star
                   x={300}
@@ -305,7 +356,13 @@ export default function KonvaShowcase() {
             </div>
           </div>
           <div className="canvas-container">
-            <Stage width={600} height={200}>
+            <Stage
+              width={BASE_CANVAS_WIDTH}
+              height={TEXT_CANVAS_HEIGHT}
+              scaleX={canvasScale}
+              scaleY={canvasScale}
+              style={stageStyle(TEXT_CANVAS_HEIGHT)}
+            >
               <Layer>
                 <Text
                   text={text1}
@@ -333,16 +390,19 @@ export default function KonvaShowcase() {
       <section className="showcase-section">
         
         <div className="examples-grid">
-        <div className="example">
+          <div className="example">
           <h3>5. Transform with Handles (Rotate & Resize)</h3>
           <p>Click on a shape to select it, then use the handles to rotate and resize</p>
           <div className="canvas-container">
             <Stage 
-              width={600} 
-              height={300} 
+              width={BASE_CANVAS_WIDTH}
+              height={BASE_CANVAS_HEIGHT}
               onMouseDown={handleDeselect}
               onTouchStart={handleDeselect}
               ref={stageRef}
+              scaleX={canvasScale}
+              scaleY={canvasScale}
+              style={stageStyle(BASE_CANVAS_HEIGHT)}
             >
               <Layer>
                 {shapes.map(renderShape)}

@@ -10,6 +10,10 @@ interface Shape {
 }
 
 export default function FabricShowcase() {
+  const BASE_CANVAS_WIDTH = 600
+  const BASE_CANVAS_HEIGHT = 300
+  const TEXT_CANVAS_HEIGHT = 200
+
   // Canvas refs
   const canvas1Ref = useRef<HTMLCanvasElement>(null)
   const canvas2Ref = useRef<HTMLCanvasElement>(null)
@@ -34,6 +38,30 @@ export default function FabricShowcase() {
   const [text1, setText1] = useState('Hello from Fabric.js!')
   const [text2, setText2] = useState('Styled and positioned text')
   const [selectedObject, setSelectedObject] = useState<FabricObject | null>(null)
+  const [canvasScale, setCanvasScale] = useState(1)
+  const firstExampleRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const updateScale = () => {
+      const exampleWidth = firstExampleRef.current?.clientWidth
+      if (!exampleWidth) return
+      const availableWidth = exampleWidth - 32
+      const scale = Math.min(1, Math.max(availableWidth / (BASE_CANVAS_WIDTH + 20), 0.25))
+      setCanvasScale(scale)
+    }
+
+    updateScale()
+    const observer = new ResizeObserver(updateScale)
+    if (firstExampleRef.current) {
+      observer.observe(firstExampleRef.current)
+    }
+    window.addEventListener('resize', updateScale)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', updateScale)
+    }
+  }, [])
 
   // Example 1: Basic Shapes
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -437,6 +465,20 @@ export default function FabricShowcase() {
     document.body.removeChild(link)
   }
 
+  useEffect(() => {
+    const applyScale = (canvas: Canvas | null, baseHeight: number) => {
+      applyFabricResponsiveScale(canvas, canvasScale, BASE_CANVAS_WIDTH, baseHeight)
+    }
+
+    applyScale(fabricCanvas1.current, BASE_CANVAS_HEIGHT)
+    applyScale(fabricCanvas2.current, BASE_CANVAS_HEIGHT)
+    applyScale(fabricCanvas3.current, BASE_CANVAS_HEIGHT)
+    applyScale(fabricCanvas4.current, TEXT_CANVAS_HEIGHT)
+    applyScale(fabricCanvas5.current, BASE_CANVAS_HEIGHT)
+    applyScale(fabricCanvas6.current, BASE_CANVAS_HEIGHT)
+    applyScale(fabricCanvas7.current, BASE_CANVAS_HEIGHT)
+  }, [canvasScale])
+
   return (
     <main className="container">
       <div className="header">
@@ -463,7 +505,7 @@ export default function FabricShowcase() {
         <h2>Interactive Examples</h2>
         
         <div className="examples-grid">
-          <div className="example">
+          <div className="example" ref={firstExampleRef}>
             <h3>1. Basic Shapes</h3>
             <p>Rectangle, circle, and star with different colors and properties</p>
             <div className="canvas-container">
@@ -643,4 +685,20 @@ export default function FabricShowcase() {
       </div>
     </main>
   )
+}
+
+function applyFabricResponsiveScale(
+  canvas: Canvas | null,
+  scale: number,
+  baseWidth: number,
+  baseHeight: number
+) {
+  if (!canvas) return
+
+  const width = baseWidth * scale
+  const height = baseHeight * scale
+
+  canvas.setDimensions({ width, height })
+  canvas.setViewportTransform([scale, 0, 0, scale, 0, 0])
+  canvas.renderAll()
 }
