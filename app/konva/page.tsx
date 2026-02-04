@@ -51,7 +51,7 @@ export default function KonvaShowcase() {
     setSelectedId(id)
   }
 
-  const handleDeselect = (e: any) => {
+  const handleDeselect = (e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) => {
     // Deselect when clicking on empty area
     const clickedOnEmpty = e.target === e.target.getStage()
     if (clickedOnEmpty) {
@@ -133,7 +133,7 @@ export default function KonvaShowcase() {
       draggable: true,
       onClick: () => handleSelect(shape.id),
       onTap: () => handleSelect(shape.id),
-      ref: (node: any) => {
+      ref: (node: Konva.Shape | null) => {
         if (node) {
           shapeRefs.current[shape.id] = node
         }
