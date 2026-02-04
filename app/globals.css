@@ -210,9 +210,17 @@ section h2 {
   border-radius: 8px;
   padding: 1rem;
   margin: 1rem 0;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   max-width: 100%;
-  overflow: auto;
+  overflow: hidden;
+}
+
+.canvas-container canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 .canvas-container.clickable {
