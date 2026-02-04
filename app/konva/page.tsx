@@ -120,7 +120,8 @@ export default function KonvaShowcase() {
                   fill="#ed8936"
                   shadowBlur={10}
                   rotation={starRotation}
-                  onClick={() => setStarRotation(starRotation + 45)}
+                  onClick={() => setStarRotation(prev => prev + 45)}
+                  onTap={() => setStarRotation(prev => prev + 45)}
                 />
               </Layer>
             </Stage>
