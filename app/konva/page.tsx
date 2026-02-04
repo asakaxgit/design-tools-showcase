@@ -284,35 +284,23 @@ export default function KonvaShowcase() {
           <p>Konva supports text rendering with various styling options. Edit the text below:</p>
           <div style={{ marginBottom: '1rem' }}>
             <div style={{ marginBottom: '0.5rem' }}>
-              <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 500 }}>First Text:</label>
+              <label htmlFor="text-input-1" className="text-input-label">First Text:</label>
               <input
+                id="text-input-1"
                 type="text"
                 value={text1}
                 onChange={(e) => setText1(e.target.value)}
-                style={{
-                  width: '100%',
-                  maxWidth: '400px',
-                  padding: '0.5rem',
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '4px',
-                  fontSize: '1rem'
-                }}
+                className="text-input"
               />
             </div>
             <div>
-              <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 500 }}>Second Text:</label>
+              <label htmlFor="text-input-2" className="text-input-label">Second Text:</label>
               <input
+                id="text-input-2"
                 type="text"
                 value={text2}
                 onChange={(e) => setText2(e.target.value)}
-                style={{
-                  width: '100%',
-                  maxWidth: '400px',
-                  padding: '0.5rem',
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '4px',
-                  fontSize: '1rem'
-                }}
+                className="text-input"
               />
             </div>
           </div>
