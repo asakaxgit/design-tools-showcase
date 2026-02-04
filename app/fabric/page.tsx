@@ -2,11 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import * as fabric from 'fabric'
+import { Canvas, Rect, Circle, Polygon, Text, Shadow, FabricObject } from 'fabric'
 
 interface Shape {
   id: string
-  fabricObject: fabric.Object
+  fabricObject: FabricObject
 }
 
 export default function FabricShowcase() {
@@ -20,34 +20,34 @@ export default function FabricShowcase() {
   const canvas7Ref = useRef<HTMLCanvasElement>(null)
 
   // Fabric canvas instances
-  const fabricCanvas1 = useRef<fabric.Canvas | null>(null)
-  const fabricCanvas2 = useRef<fabric.Canvas | null>(null)
-  const fabricCanvas3 = useRef<fabric.Canvas | null>(null)
-  const fabricCanvas4 = useRef<fabric.Canvas | null>(null)
-  const fabricCanvas5 = useRef<fabric.Canvas | null>(null)
-  const fabricCanvas6 = useRef<fabric.Canvas | null>(null)
-  const fabricCanvas7 = useRef<fabric.Canvas | null>(null)
+  const fabricCanvas1 = useRef<Canvas | null>(null)
+  const fabricCanvas2 = useRef<Canvas | null>(null)
+  const fabricCanvas3 = useRef<Canvas | null>(null)
+  const fabricCanvas4 = useRef<Canvas | null>(null)
+  const fabricCanvas5 = useRef<Canvas | null>(null)
+  const fabricCanvas6 = useRef<Canvas | null>(null)
+  const fabricCanvas7 = useRef<Canvas | null>(null)
 
   const [rectColor, setRectColor] = useState('#4299e1')
   const [circlePos, setCirclePos] = useState({ x: 100, y: 200 })
   const [starRotation, setStarRotation] = useState(0)
   const [text1, setText1] = useState('Hello from Fabric.js!')
   const [text2, setText2] = useState('Styled and positioned text')
-  const [selectedObject, setSelectedObject] = useState<fabric.Object | null>(null)
+  const [selectedObject, setSelectedObject] = useState<FabricObject | null>(null)
 
   // Example 1: Basic Shapes
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!canvas1Ref.current) return
 
-    const canvas = new fabric.Canvas(canvas1Ref.current, {
+    const canvas = new Canvas(canvas1Ref.current, {
       width: 600,
       height: 300,
       backgroundColor: '#ffffff'
     })
     fabricCanvas1.current = canvas
 
-    const rect = new fabric.Rect({
+    const rect = new Rect({
       left: 50,
       top: 50,
       width: 100,
@@ -55,7 +55,7 @@ export default function FabricShowcase() {
       fill: rectColor,
       rx: 10,
       ry: 10,
-      shadow: new fabric.Shadow({ blur: 5, color: 'rgba(0,0,0,0.3)' })
+      shadow: new Shadow({ blur: 5, color: 'rgba(0,0,0,0.3)' })
     })
 
     rect.on('mouseover', () => {
@@ -70,14 +70,14 @@ export default function FabricShowcase() {
       canvas.renderAll()
     })
 
-    const circle = new fabric.Circle({
+    const circle = new Circle({
       left: 250,
       top: 90,
       radius: 40,
       fill: '#48bb78',
       originX: 'center',
       originY: 'center',
-      shadow: new fabric.Shadow({ blur: 5, color: 'rgba(0,0,0,0.3)' })
+      shadow: new Shadow({ blur: 5, color: 'rgba(0,0,0,0.3)' })
     })
 
     const star = createStar(400, 90, 5, 40, 20, '#f6ad55')
@@ -95,14 +95,14 @@ export default function FabricShowcase() {
   useEffect(() => {
     if (!canvas2Ref.current) return
 
-    const canvas = new fabric.Canvas(canvas2Ref.current, {
+    const canvas = new Canvas(canvas2Ref.current, {
       width: 600,
       height: 300,
       backgroundColor: '#ffffff'
     })
     fabricCanvas2.current = canvas
 
-    const text = new fabric.Text('Drag me!', {
+    const text = new Text('Drag me!', {
       left: circlePos.x - 30,
       top: circlePos.y - 60,
       fontSize: 16,
@@ -110,14 +110,14 @@ export default function FabricShowcase() {
       selectable: false
     })
 
-    const circle = new fabric.Circle({
+    const circle = new Circle({
       left: circlePos.x,
       top: circlePos.y,
       radius: 50,
       fill: '#9f7aea',
       originX: 'center',
       originY: 'center',
-      shadow: new fabric.Shadow({ blur: 10, color: 'rgba(0,0,0,0.3)' })
+      shadow: new Shadow({ blur: 10, color: 'rgba(0,0,0,0.3)' })
     })
 
     circle.on('moving', () => {
@@ -142,7 +142,7 @@ export default function FabricShowcase() {
   useEffect(() => {
     if (!canvas3Ref.current) return
 
-    const canvas = new fabric.Canvas(canvas3Ref.current, {
+    const canvas = new Canvas(canvas3Ref.current, {
       width: 600,
       height: 300,
       backgroundColor: '#ffffff',
@@ -153,7 +153,7 @@ export default function FabricShowcase() {
     const star = createStar(300, 150, 6, 70, 40, '#ed8936')
     star.set({
       angle: starRotation,
-      shadow: new fabric.Shadow({ blur: 10, color: 'rgba(0,0,0,0.3)' })
+      shadow: new Shadow({ blur: 10, color: 'rgba(0,0,0,0.3)' })
     })
 
     star.on('mousedown', () => {
@@ -193,7 +193,7 @@ export default function FabricShowcase() {
   useEffect(() => {
     if (!canvas4Ref.current) return
 
-    const canvas = new fabric.Canvas(canvas4Ref.current, {
+    const canvas = new Canvas(canvas4Ref.current, {
       width: 600,
       height: 200,
       backgroundColor: '#ffffff',
@@ -201,7 +201,7 @@ export default function FabricShowcase() {
     })
     fabricCanvas4.current = canvas
 
-    const textObj1 = new fabric.Text(text1, {
+    const textObj1 = new Text(text1, {
       left: 50,
       top: 50,
       fontSize: 32,
@@ -210,7 +210,7 @@ export default function FabricShowcase() {
       selectable: false
     })
 
-    const textObj2 = new fabric.Text(text2, {
+    const textObj2 = new Text(text2, {
       left: 50,
       top: 100,
       fontSize: 18,
@@ -231,14 +231,14 @@ export default function FabricShowcase() {
   useEffect(() => {
     if (!canvas5Ref.current) return
 
-    const canvas = new fabric.Canvas(canvas5Ref.current, {
+    const canvas = new Canvas(canvas5Ref.current, {
       width: 600,
       height: 300,
       backgroundColor: '#ffffff'
     })
     fabricCanvas5.current = canvas
 
-    const rect = new fabric.Rect({
+    const rect = new Rect({
       left: 50,
       top: 50,
       width: 100,
@@ -246,7 +246,7 @@ export default function FabricShowcase() {
       fill: '#4299e1'
     })
 
-    const circle = new fabric.Circle({
+    const circle = new Circle({
       left: 250,
       top: 90,
       radius: 40,
@@ -280,14 +280,14 @@ export default function FabricShowcase() {
   useEffect(() => {
     if (!canvas6Ref.current) return
 
-    const canvas = new fabric.Canvas(canvas6Ref.current, {
+    const canvas = new Canvas(canvas6Ref.current, {
       width: 600,
       height: 300,
       backgroundColor: '#ffffff'
     })
     fabricCanvas6.current = canvas
 
-    const rect = new fabric.Rect({
+    const rect = new Rect({
       left: 50,
       top: 50,
       width: 100,
@@ -296,7 +296,7 @@ export default function FabricShowcase() {
     })
     rect.set('id', 'rect1')
 
-    const circle = new fabric.Circle({
+    const circle = new Circle({
       left: 250,
       top: 90,
       radius: 40,
@@ -319,14 +319,14 @@ export default function FabricShowcase() {
   useEffect(() => {
     if (!canvas7Ref.current) return
 
-    const canvas = new fabric.Canvas(canvas7Ref.current, {
+    const canvas = new Canvas(canvas7Ref.current, {
       width: 600,
       height: 300,
       backgroundColor: '#ffffff'
     })
     fabricCanvas7.current = canvas
 
-    const rect = new fabric.Rect({
+    const rect = new Rect({
       left: 50,
       top: 50,
       width: 100,
@@ -334,7 +334,7 @@ export default function FabricShowcase() {
       fill: '#4299e1'
     })
 
-    const circle = new fabric.Circle({
+    const circle = new Circle({
       left: 250,
       top: 90,
       radius: 40,
@@ -363,7 +363,7 @@ export default function FabricShowcase() {
       })
     }
 
-    return new fabric.Polygon(starPoints, {
+    return new Polygon(starPoints, {
       left,
       top,
       fill,
