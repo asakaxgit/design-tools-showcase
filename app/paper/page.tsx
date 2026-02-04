@@ -4,25 +4,27 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 
 export default function PaperShowcase() {
-  // Canvas refs
-  const canvas1Ref = useRef<HTMLCanvasElement>(null)
-  const canvas2Ref = useRef<HTMLCanvasElement>(null)
-  const canvas3Ref = useRef<HTMLCanvasElement>(null)
-  const canvas4Ref = useRef<HTMLCanvasElement>(null)
-  const canvas5Ref = useRef<HTMLCanvasElement>(null)
-  const canvas6Ref = useRef<HTMLCanvasElement>(null)
-  const canvas7Ref = useRef<HTMLCanvasElement>(null)
+  const canvasRefs = {
+    canvas1: useRef<HTMLCanvasElement>(null),
+    canvas2: useRef<HTMLCanvasElement>(null),
+    canvas3: useRef<HTMLCanvasElement>(null),
+    canvas4: useRef<HTMLCanvasElement>(null),
+    canvas5: useRef<HTMLCanvasElement>(null),
+    canvas6: useRef<HTMLCanvasElement>(null),
+    canvas7: useRef<HTMLCanvasElement>(null),
+  }
 
   const [rectColor, setRectColor] = useState('#4299e1')
   const [circlePos, setCirclePos] = useState({ x: 100, y: 200 })
   const [starRotation, setStarRotation] = useState(0)
   const [text1, setText1] = useState('Hello from Paper.js!')
   const [text2, setText2] = useState('Styled and positioned text')
-  const [selectedItem, setSelectedItem] = useState<any | null>(null)
+  const [selectedItem, setSelectedItem] = useState<any>(null)
   const [paperLoaded, setPaperLoaded] = useState(false)
   const paperRef = useRef<any>(null)
+  const projectsRef = useRef<any[]>([])
 
-  // Load Paper.js dynamically on client side only
+  // Load Paper.js dynamically
   useEffect(() => {
     import('paper').then((module) => {
       paperRef.current = module.default
@@ -30,451 +32,293 @@ export default function PaperShowcase() {
     })
   }, [])
 
-  // Example 1: Basic Shapes
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // Initialize all canvases when Paper.js is loaded
   useEffect(() => {
-    if (!canvas1Ref.current || !paperLoaded || !paperRef.current) return
-    
+    if (!paperLoaded || !paperRef.current) return
+
     const paper = paperRef.current
-    paper.setup(canvas1Ref.current)
-    const project = paper.project
+    const cleanupProjects: any[] = []
 
-    const rect = new paper.Path.Rectangle({
-      point: [50, 50],
-      size: [100, 80],
-      radius: 10,
-      fillColor: new paper.Color(rectColor),
-      shadowColor: new paper.Color(0, 0, 0, 0.3),
-      shadowBlur: 5
-    })
+    // Example 1: Basic Shapes
+    if (canvasRefs.canvas1.current) {
+      paper.setup(canvasRefs.canvas1.current)
+      const project1 = paper.project
+      cleanupProjects.push(project1)
 
-    rect.onMouseEnter = () => {
-      setRectColor('#2b6cb0')
-      rect.fillColor = new paper.Color('#2b6cb0')
+      const rect = new paper.Path.Rectangle({
+        point: [50, 50],
+        size: [100, 80],
+        radius: 10,
+        fillColor: new paper.Color(rectColor),
+        shadowColor: new paper.Color(0, 0, 0, 0.3),
+        shadowBlur: 5
+      })
+
+      const circle = new paper.Path.Circle({
+        center: [250, 90],
+        radius: 40,
+        fillColor: new paper.Color('#48bb78'),
+        shadowColor: new paper.Color(0, 0, 0, 0.3),
+        shadowBlur: 5
+      })
+
+      const star = new paper.Path.Star({
+        center: [400, 90],
+        points: 5,
+        radius1: 20,
+        radius2: 40,
+        fillColor: new paper.Color('#f6ad55'),
+        shadowColor: new paper.Color(0, 0, 0, 0.3),
+        shadowBlur: 5
+      })
     }
 
-    rect.onMouseLeave = () => {
-      setRectColor('#4299e1')
-      rect.fillColor = new paper.Color('#4299e1')
-    }
+    // Example 2: Draggable Elements
+    if (canvasRefs.canvas2.current) {
+      paper.setup(canvasRefs.canvas2.current)
+      const project2 = paper.project
+      cleanupProjects.push(project2)
 
-    const circle = new paper.Path.Circle({
-      center: [250, 90],
-      radius: 40,
-      fillColor: new paper.Color('#48bb78'),
-      shadowColor: new paper.Color(0, 0, 0, 0.3),
-      shadowBlur: 5
-    })
+      const text = new paper.PointText({
+        point: [circlePos.x - 30, circlePos.y - 60],
+        content: 'Drag me!',
+        fontSize: 16,
+        fillColor: new paper.Color('#2d3748')
+      })
 
-    const star = new paper.Path.Star({
-      center: [400, 90],
-      points: 5,
-      radius1: 20,
-      radius2: 40,
-      fillColor: new paper.Color('#f6ad55'),
-      shadowColor: new paper.Color(0, 0, 0, 0.3),
-      shadowBlur: 5
-    })
+      const circle = new paper.Path.Circle({
+        center: [circlePos.x, circlePos.y],
+        radius: 50,
+        fillColor: new paper.Color('#9f7aea'),
+        shadowColor: new paper.Color(0, 0, 0, 0.3),
+        shadowBlur: 10
+      })
 
-    // paper.view updates automatically
-
-    return () => {
-      project.clear()
-      project.remove()
-    }
-  }, [])
-
-  // Example 2: Draggable Elements
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (!canvas2Ref.current) return
-
-    paper.setup(canvas2Ref.current)
-    const project = paper.project
-
-    const text = new paper.PointText({
-      point: [circlePos.x - 30, circlePos.y - 60],
-      content: 'Drag me!',
-      fontSize: 16,
-      fillColor: new paper.Color('#2d3748')
-    })
-
-    const circle = new paper.Path.Circle({
-      center: [circlePos.x, circlePos.y],
-      radius: 50,
-      fillColor: new paper.Color('#9f7aea'),
-      shadowColor: new paper.Color(0, 0, 0, 0.3),
-      shadowBlur: 10
-    })
-
-    circle.onMouseDrag = (event: any) => {
-      circle.position = circle.position.add(event.delta)
-      text.position = new paper.Point(circle.position.x - 30, circle.position.y - 60)
-      setCirclePos({ x: circle.position.x, y: circle.position.y })
-    }
-
-    // paper.view updates automatically
-
-    return () => {
-      project.clear()
-      project.remove()
-    }
-  }, [])
-
-  // Example 3: Rotation & Animation
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (!canvas3Ref.current) return
-
-    paper.setup(canvas3Ref.current)
-    const project = paper.project
-
-    const star = new paper.Path.Star({
-      center: [300, 150],
-      points: 6,
-      radius1: 40,
-      radius2: 70,
-      fillColor: new paper.Color('#ed8936'),
-      shadowColor: new paper.Color(0, 0, 0, 0.3),
-      shadowBlur: 10
-    })
-
-    star.rotate(starRotation)
-
-    star.onMouseDown = () => {
-      const newRotation = starRotation + 45
-      setStarRotation(newRotation)
-      
-      // Simple rotation animation
-      const steps = 10
-      const increment = 45 / steps
-      let currentStep = 0
-      
-      const animate = () => {
-        if (currentStep < steps) {
-          star.rotate(increment)
-          // paper.view updates automatically
-          currentStep++
-          requestAnimationFrame(animate)
-        }
-      }
-      
-      animate()
-    }
-
-    // paper.view updates automatically
-
-    return () => {
-      project.clear()
-      project.remove()
-    }
-  }, [])
-
-  // Example 4: Text Rendering
-  useEffect(() => {
-    if (!canvas4Ref.current) return
-
-    paper.setup(canvas4Ref.current)
-    const project = paper.project
-
-    const textObj1 = new paper.PointText({
-      point: [50, 75],
-      content: text1,
-      fontSize: 32,
-      fontFamily: 'Arial',
-      fillColor: new paper.Color('#2d3748')
-    })
-
-    const textObj2 = new paper.PointText({
-      point: [50, 125],
-      content: text2,
-      fontSize: 18,
-      fontFamily: 'Arial',
-      fillColor: new paper.Color('#4299e1')
-    })
-
-    // paper.view updates automatically
-
-    return () => {
-      project.clear()
-      project.remove()
-    }
-  }, [text1, text2])
-
-  // Example 5: Transform with Handles
-  useEffect(() => {
-    if (!canvas5Ref.current) return
-
-    paper.setup(canvas5Ref.current)
-    const project = paper.project
-
-    const rect = new paper.Path.Rectangle({
-      point: [50, 50],
-      size: [100, 80],
-      fillColor: new paper.Color('#4299e1')
-    })
-
-    const circle = new paper.Path.Circle({
-      center: [250, 90],
-      radius: 40,
-      fillColor: new paper.Color('#48bb78')
-    })
-
-    const star = new paper.Path.Star({
-      center: [400, 90],
-      points: 5,
-      radius1: 20,
-      radius2: 40,
-      fillColor: new paper.Color('#f6ad55')
-    })
-
-    let selectedPath: paper.Item | null = null
-    let selectionBounds: paper.Path.Rectangle | null = null
-
-    const items = [rect, circle, star]
-    items.forEach(item => {
-      item.onMouseDown = () => {
-        if (selectionBounds) {
-          selectionBounds.remove()
-        }
-        
-        selectedPath = item
-        setSelectedItem(item)
-        
-        selectionBounds = new paper.Path.Rectangle({
-          rectangle: item.bounds,
-          strokeColor: new paper.Color('#0066cc'),
-          strokeWidth: 2,
-          dashArray: [4, 4]
-        })
-        
-        // paper.view updates automatically
-      }
-
-      // Enable dragging for all items
-      item.onMouseDrag = (event: any) => {
-        item.position = item.position.add(event.delta)
-        if (selectionBounds && item === selectedPath) {
-          selectionBounds.position = selectionBounds.position.add(event.delta)
-        }
-      }
-    })
-
-    // Deselect when clicking on empty area
-    paper.view.onMouseDown = (event: any) => {
-      if (!event.item || !items.includes(event.item as paper.Path)) {
-        if (selectionBounds) {
-          selectionBounds.remove()
-          selectionBounds = null
-        }
-        selectedPath = null
-        setSelectedItem(null)
-        // paper.view updates automatically
+      circle.onMouseDrag = (event: any) => {
+        circle.position = circle.position.add(event.delta)
+        text.position = new paper.Point(circle.position.x - 30, circle.position.y - 60)
       }
     }
 
-    // paper.view updates automatically
+    // Example 3: Rotation & Animation
+    if (canvasRefs.canvas3.current) {
+      paper.setup(canvasRefs.canvas3.current)
+      const project3 = paper.project
+      cleanupProjects.push(project3)
 
-    return () => {
-      project.clear()
-      project.remove()
-    }
-  }, [])
+      const star = new paper.Path.Star({
+        center: [300, 150],
+        points: 6,
+        radius1: 40,
+        radius2: 70,
+        fillColor: new paper.Color('#ed8936'),
+        shadowColor: new paper.Color(0, 0, 0, 0.3),
+        shadowBlur: 10
+      })
 
-  // Example 6: Layer Management
-  useEffect(() => {
-    if (!canvas6Ref.current) return
-
-    paper.setup(canvas6Ref.current)
-    const project = paper.project
-
-    const rect = new paper.Path.Rectangle({
-      point: [50, 50],
-      size: [100, 80],
-      fillColor: new paper.Color('#4299e1'),
-      name: 'rect1'
-    })
-
-    const circle = new paper.Path.Circle({
-      center: [250, 90],
-      radius: 40,
-      fillColor: new paper.Color('#48bb78'),
-      name: 'circle1'
-    })
-
-    const star = new paper.Path.Star({
-      center: [400, 90],
-      points: 5,
-      radius1: 20,
-      radius2: 40,
-      fillColor: new paper.Color('#f6ad55'),
-      name: 'star1'
-    })
-
-    let selectionBounds: paper.Path.Rectangle | null = null
-
-    const items = [rect, circle, star]
-    items.forEach(item => {
-      item.onMouseDown = () => {
-        if (selectionBounds) {
-          selectionBounds.remove()
-        }
-        
-        setSelectedItem(item)
-        
-        selectionBounds = new paper.Path.Rectangle({
-          rectangle: item.bounds,
-          strokeColor: new paper.Color('#0066cc'),
-          strokeWidth: 2,
-          dashArray: [4, 4]
-        })
-        
-        // paper.view updates automatically
+      star.onMouseDown = () => {
+        setStarRotation(prev => prev + 45)
+        star.rotate(45)
       }
+    }
 
-      item.onMouseDrag = (event: any) => {
-        item.position = item.position.add(event.delta)
-        if (selectionBounds) {
-          selectionBounds.position = selectionBounds.position.add(event.delta)
+    // Example 4: Text Rendering
+    if (canvasRefs.canvas4.current) {
+      paper.setup(canvasRefs.canvas4.current)
+      const project4 = paper.project
+      cleanupProjects.push(project4)
+
+      new paper.PointText({
+        point: [50, 75],
+        content: text1,
+        fontSize: 32,
+        fontFamily: 'Arial',
+        fillColor: new paper.Color('#2d3748')
+      })
+
+      new paper.PointText({
+        point: [50, 125],
+        content: text2,
+        fontSize: 18,
+        fontFamily: 'Arial',
+        fillColor: new paper.Color('#4299e1')
+      })
+    }
+
+    // Example 5: Transform with Handles
+    if (canvasRefs.canvas5.current) {
+      paper.setup(canvasRefs.canvas5.current)
+      const project5 = paper.project
+      cleanupProjects.push(project5)
+
+      const rect = new paper.Path.Rectangle({
+        point: [50, 50],
+        size: [100, 80],
+        fillColor: new paper.Color('#4299e1')
+      })
+
+      const circle = new paper.Path.Circle({
+        center: [250, 90],
+        radius: 40,
+        fillColor: new paper.Color('#48bb78')
+      })
+
+      const star = new paper.Path.Star({
+        center: [400, 90],
+        points: 5,
+        radius1: 20,
+        radius2: 40,
+        fillColor: new paper.Color('#f6ad55')
+      })
+
+      const items = [rect, circle, star]
+      let selectionBounds: any = null
+
+      items.forEach(item => {
+        item.onMouseDown = () => {
+          if (selectionBounds) selectionBounds.remove()
+          
+          setSelectedItem(item)
+          
+          selectionBounds = new paper.Path.Rectangle({
+            rectangle: item.bounds,
+            strokeColor: new paper.Color('#0066cc'),
+            strokeWidth: 2,
+            dashArray: [4, 4]
+          })
         }
-      }
-    })
 
-    // paper.view updates automatically
+        item.onMouseDrag = (event: any) => {
+          item.position = item.position.add(event.delta)
+          if (selectionBounds) {
+            selectionBounds.position = selectionBounds.position.add(event.delta)
+          }
+        }
+      })
+    }
+
+    // Example 6: Layer Management
+    if (canvasRefs.canvas6.current) {
+      paper.setup(canvasRefs.canvas6.current)
+      const project6 = paper.project
+      cleanupProjects.push(project6)
+      projectsRef.current[6] = project6
+
+      const rect = new paper.Path.Rectangle({
+        point: [50, 50],
+        size: [100, 80],
+        fillColor: new paper.Color('#4299e1'),
+        name: 'rect1'
+      })
+
+      const circle = new paper.Path.Circle({
+        center: [250, 90],
+        radius: 40,
+        fillColor: new paper.Color('#48bb78'),
+        name: 'circle1'
+      })
+
+      const star = new paper.Path.Star({
+        center: [400, 90],
+        points: 5,
+        radius1: 20,
+        radius2: 40,
+        fillColor: new paper.Color('#f6ad55'),
+        name: 'star1'
+      })
+
+      const items = [rect, circle, star]
+
+      items.forEach(item => {
+        item.onMouseDown = () => {
+          setSelectedItem(item)
+        }
+
+        item.onMouseDrag = (event: any) => {
+          item.position = item.position.add(event.delta)
+        }
+      })
+    }
+
+    // Example 7: Export Canvas
+    if (canvasRefs.canvas7.current) {
+      paper.setup(canvasRefs.canvas7.current)
+      const project7 = paper.project
+      cleanupProjects.push(project7)
+
+      new paper.Path.Rectangle({
+        point: [50, 50],
+        size: [100, 80],
+        fillColor: new paper.Color('#4299e1')
+      })
+
+      new paper.Path.Circle({
+        center: [250, 90],
+        radius: 40,
+        fillColor: new paper.Color('#48bb78')
+      })
+
+      new paper.Path.Star({
+        center: [400, 90],
+        points: 5,
+        radius1: 20,
+        radius2: 40,
+        fillColor: new paper.Color('#f6ad55')
+      })
+    }
 
     return () => {
-      project.clear()
-      project.remove()
+      cleanupProjects.forEach(project => {
+        if (project) {
+          project.clear()
+          project.remove()
+        }
+      })
     }
-  }, [])
-
-  // Example 7: Export Canvas
-  useEffect(() => {
-    if (!canvas7Ref.current) return
-
-    paper.setup(canvas7Ref.current)
-    const project = paper.project
-
-    const rect = new paper.Path.Rectangle({
-      point: [50, 50],
-      size: [100, 80],
-      fillColor: new paper.Color('#4299e1')
-    })
-
-    const circle = new paper.Path.Circle({
-      center: [250, 90],
-      radius: 40,
-      fillColor: new paper.Color('#48bb78')
-    })
-
-    const star = new paper.Path.Star({
-      center: [400, 90],
-      points: 5,
-      radius1: 20,
-      radius2: 40,
-      fillColor: new paper.Color('#f6ad55')
-    })
-
-    // paper.view updates automatically
-
-    return () => {
-      project.clear()
-      project.remove()
-    }
-  }, [])
+  }, [paperLoaded, text1, text2])
 
   // Layer management functions
   const moveToFront = () => {
-    if (selectedItem && canvas6Ref.current) {
+    if (selectedItem) {
       selectedItem.bringToFront()
-      paper.project.activeLayer.children.forEach((child: paper.Item) => {
-        if (child.className === 'Path' && child.strokeColor) {
-          child.remove()
-        }
-      })
-      const selectionBounds = new paper.Path.Rectangle({
-        rectangle: selectedItem.bounds,
-        strokeColor: new paper.Color('#0066cc'),
-        strokeWidth: 2,
-        dashArray: [4, 4]
-      })
-      // paper.view updates automatically
     }
   }
 
   const moveToBack = () => {
-    if (selectedItem && canvas6Ref.current) {
+    if (selectedItem) {
       selectedItem.sendToBack()
-      paper.project.activeLayer.children.forEach((child: paper.Item) => {
-        if (child.className === 'Path' && child.strokeColor) {
-          child.remove()
-        }
-      })
-      const selectionBounds = new paper.Path.Rectangle({
-        rectangle: selectedItem.bounds,
-        strokeColor: new paper.Color('#0066cc'),
-        strokeWidth: 2,
-        dashArray: [4, 4]
-      })
-      // paper.view updates automatically
     }
   }
 
   const moveUp = () => {
-    if (selectedItem && canvas6Ref.current) {
+    if (selectedItem) {
       const index = selectedItem.index
-      if (index < paper.project.activeLayer.children.length - 1) {
-        selectedItem.insertAbove(paper.project.activeLayer.children[index + 1])
-        paper.project.activeLayer.children.forEach((child: paper.Item) => {
-          if (child.className === 'Path' && child.strokeColor) {
-            child.remove()
-          }
-        })
-        const selectionBounds = new paper.Path.Rectangle({
-          rectangle: selectedItem.bounds,
-          strokeColor: new paper.Color('#0066cc'),
-          strokeWidth: 2,
-          dashArray: [4, 4]
-        })
-        // paper.view updates automatically
+      if (index < selectedItem.layer.children.length - 1) {
+        selectedItem.insertAbove(selectedItem.layer.children[index + 1])
       }
     }
   }
 
   const moveDown = () => {
-    if (selectedItem && canvas6Ref.current) {
+    if (selectedItem) {
       const index = selectedItem.index
       if (index > 0) {
-        selectedItem.insertBelow(paper.project.activeLayer.children[index - 1])
-        paper.project.activeLayer.children.forEach((child: paper.Item) => {
-          if (child.className === 'Path' && child.strokeColor) {
-            child.remove()
-          }
-        })
-        const selectionBounds = new paper.Path.Rectangle({
-          rectangle: selectedItem.bounds,
-          strokeColor: new paper.Color('#0066cc'),
-          strokeWidth: 2,
-          dashArray: [4, 4]
-        })
-        // paper.view updates automatically
+        selectedItem.insertBelow(selectedItem.layer.children[index - 1])
       }
     }
   }
 
   // Export functions
   const exportForPreview = () => {
-    if (canvas7Ref.current) {
-      const dataURL = canvas7Ref.current.toDataURL('image/png', 1.0)
+    if (canvasRefs.canvas7.current) {
+      const dataURL = canvasRefs.canvas7.current.toDataURL('image/png', 1.0)
       downloadImage(dataURL, 'canvas-preview.png')
     }
   }
 
   const exportForPrint = () => {
-    if (canvas7Ref.current) {
-      // For higher resolution, we'd need to recreate the canvas at 3x size
-      // For now, we'll just use the current canvas
-      const dataURL = canvas7Ref.current.toDataURL('image/png', 1.0)
+    if (canvasRefs.canvas7.current) {
+      const dataURL = canvasRefs.canvas7.current.toDataURL('image/png', 1.0)
       downloadImage(dataURL, 'canvas-print.png')
     }
   }
@@ -486,6 +330,17 @@ export default function PaperShowcase() {
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+  }
+
+  if (!paperLoaded) {
+    return (
+      <main className="container">
+        <div className="header">
+          <h1>Paper.js Showcase</h1>
+          <p className="subtitle">Loading...</p>
+        </div>
+      </main>
+    )
   }
 
   return (
@@ -518,16 +373,16 @@ export default function PaperShowcase() {
             <h3>1. Basic Shapes</h3>
             <p>Rectangle, circle, and star with different colors and properties</p>
             <div className="canvas-container">
-              <canvas ref={canvas1Ref} width={600} height={300} />
+              <canvas ref={canvasRefs.canvas1} width={600} height={300} />
             </div>
-            <p className="example-note">Hover over the blue rectangle to see color change</p>
+            <p className="example-note">Shapes with shadows and rounded corners</p>
           </div>
 
           <div className="example">
             <h3>2. Draggable Elements</h3>
             <p>Drag the circle to move it around the canvas</p>
             <div className="canvas-container">
-              <canvas ref={canvas2Ref} width={600} height={300} />
+              <canvas ref={canvasRefs.canvas2} width={600} height={300} />
             </div>
           </div>
 
@@ -535,7 +390,7 @@ export default function PaperShowcase() {
             <h3>3. Rotation & Animation</h3>
             <p>Click the star to rotate it</p>
             <div className="canvas-container clickable">
-              <canvas ref={canvas3Ref} width={600} height={300} />
+              <canvas ref={canvasRefs.canvas3} width={600} height={300} />
             </div>
             <p className="example-note">Current rotation: {starRotation}°</p>
           </div>
@@ -566,7 +421,7 @@ export default function PaperShowcase() {
               </div>
             </div>
             <div className="canvas-container">
-              <canvas ref={canvas4Ref} width={600} height={200} />
+              <canvas ref={canvasRefs.canvas4} width={600} height={200} />
             </div>
           </div>
         </div>
@@ -578,10 +433,10 @@ export default function PaperShowcase() {
             <h3>5. Transform with Handles (Rotate & Resize)</h3>
             <p>Click on a shape to select it and drag to move</p>
             <div className="canvas-container">
-              <canvas ref={canvas5Ref} width={600} height={300} />
+              <canvas ref={canvasRefs.canvas5} width={600} height={300} />
             </div>
             <p className="example-note">
-              {selectedItem ? `Selected object` : 'Click on a shape to select it'}
+              {selectedItem ? 'Selected object' : 'Click on a shape to select it'}
             </p>
           </div>
 
@@ -621,7 +476,7 @@ export default function PaperShowcase() {
               </div>
             </div>
             <div className="canvas-container">
-              <canvas ref={canvas6Ref} width={600} height={300} />
+              <canvas ref={canvasRefs.canvas6} width={600} height={300} />
             </div>
           </div>
 
@@ -639,7 +494,7 @@ export default function PaperShowcase() {
               </button>
             </div>
             <div className="canvas-container">
-              <canvas ref={canvas7Ref} width={600} height={300} />
+              <canvas ref={canvasRefs.canvas7} width={600} height={300} />
             </div>
             <p className="example-note">
               Preview export is at 1x scale (web quality), Print export is at 3x scale (high resolution)
