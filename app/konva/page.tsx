@@ -122,14 +122,6 @@ export default function KonvaShowcase() {
                   rotation={starRotation}
                   onClick={() => setStarRotation(prev => prev + 45)}
                   onTap={() => setStarRotation(prev => prev + 45)}
-                  onMouseEnter={(e) => {
-                    const container = e.target.getStage()?.container();
-                    if (container) container.style.cursor = 'pointer';
-                  }}
-                  onMouseLeave={(e) => {
-                    const container = e.target.getStage()?.container();
-                    if (container) container.style.cursor = 'default';
-                  }}
                 />
               </Layer>
             </Stage>
