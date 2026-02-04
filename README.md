@@ -2,6 +2,8 @@
 
 A showcase project to evaluate graphics libraries and paid solutions for informed product decision-making.
 
+🔗 **Live Demo**: [https://asakaxgit.github.io/design-tools-showcase/](https://asakaxgit.github.io/design-tools-showcase/)
+
 ## Purpose
 
 This repository demonstrates and evaluates various graphics libraries to help make informed decisions about which technology to use in production.
@@ -45,6 +47,24 @@ npm run build
 npm start
 ```
 
+### Static Export (for GitHub Pages)
+
+```bash
+npm run build
+```
+
+The static site will be generated in the `out/` directory.
+
+## Deployment
+
+This project is automatically deployed to GitHub Pages when changes are pushed to the `main` branch. The deployment workflow:
+
+1. Builds the Next.js app as a static export
+2. Uploads the build artifacts
+3. Deploys to GitHub Pages
+
+View the live showcase at: [https://asakaxgit.github.io/design-tools-showcase/](https://asakaxgit.github.io/design-tools-showcase/)
+
 ## Project Structure
 
 ```
@@ -64,7 +84,9 @@ Each library will be evaluated based on:
 
 ## Status
 
-🚧 **In Development** - Currently setting up the project infrastructure.
+✅ **Konva Showcase Complete** - Interactive examples implemented  
+🚧 **Fabric.js & Paper.js** - Coming soon  
+🚀 **Deployed to GitHub Pages** - Auto-deployment enabled
 
 ## License
 
