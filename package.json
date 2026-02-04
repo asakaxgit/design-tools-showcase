@@ -1,0 +1,27 @@
+{
+  "name": "design-tools-showcase",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Showcase and evaluate graphics libraries for production decision",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "konva": "^10.2.0",
+    "next": "15.5.11",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-konva": "^19.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.3.3",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "15.5.11"
+  }
+}
