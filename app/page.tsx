@@ -31,13 +31,13 @@ export default function Home() {
           <div className="library-card">
             <h3>Fabric.js</h3>
             <p>Powerful canvas library with interactive object model</p>
-            <span className="status">Coming Soon</span>
+            <Link href="/fabric" className="card-link">View Showcase →</Link>
           </div>
 
           <div className="library-card">
             <h3>Paper.js</h3>
             <p>Vector graphics scripting framework</p>
-            <span className="status">Coming Soon</span>
+            <Link href="/paper" className="card-link">View Showcase →</Link>
           </div>
         </div>
       </section>
