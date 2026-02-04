@@ -24,6 +24,10 @@ export default function KonvaShowcase() {
   const [circlePos, setCirclePos] = useState({ x: 100, y: 200 })
   const [starRotation, setStarRotation] = useState(0)
   
+  // State for text rendering example
+  const [text1, setText1] = useState('Hello from Konva!')
+  const [text2, setText2] = useState('Styled and positioned text')
+  
   // State for transform example
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [shapes, setShapes] = useState<Shape[]>([
@@ -179,6 +183,7 @@ export default function KonvaShowcase() {
       <section className="showcase-section">
         <h2>Interactive Examples</h2>
         
+        <div className="examples-grid">
         <div className="example">
           <h3>1. Basic Shapes</h3>
           <p>Rectangle, circle, and star with different colors and properties</p>
@@ -276,12 +281,46 @@ export default function KonvaShowcase() {
 
         <div className="example">
           <h3>4. Text Rendering</h3>
-          <p>Konva supports text rendering with various styling options</p>
+          <p>Konva supports text rendering with various styling options. Edit the text below:</p>
+          <div style={{ marginBottom: '1rem' }}>
+            <div style={{ marginBottom: '0.5rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 500 }}>First Text:</label>
+              <input
+                type="text"
+                value={text1}
+                onChange={(e) => setText1(e.target.value)}
+                style={{
+                  width: '100%',
+                  maxWidth: '400px',
+                  padding: '0.5rem',
+                  border: '1px solid #e0e0e0',
+                  borderRadius: '4px',
+                  fontSize: '1rem'
+                }}
+              />
+            </div>
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 500 }}>Second Text:</label>
+              <input
+                type="text"
+                value={text2}
+                onChange={(e) => setText2(e.target.value)}
+                style={{
+                  width: '100%',
+                  maxWidth: '400px',
+                  padding: '0.5rem',
+                  border: '1px solid #e0e0e0',
+                  borderRadius: '4px',
+                  fontSize: '1rem'
+                }}
+              />
+            </div>
+          </div>
           <div className="canvas-container">
             <Stage width={600} height={200}>
               <Layer>
                 <Text
-                  text="Hello from Konva!"
+                  text={text1}
                   x={50}
                   y={50}
                   fontSize={32}
@@ -289,7 +328,7 @@ export default function KonvaShowcase() {
                   fill="#2d3748"
                 />
                 <Text
-                  text="Styled and positioned text"
+                  text={text2}
                   x={50}
                   y={100}
                   fontSize={18}
@@ -300,11 +339,12 @@ export default function KonvaShowcase() {
             </Stage>
           </div>
         </div>
+        </div>
       </section>
 
       <section className="showcase-section">
-        <h2>Advanced Features</h2>
-
+        
+        <div className="examples-grid">
         <div className="example">
           <h3>5. Transform with Handles (Rotate & Resize)</h3>
           <p>Click on a shape to select it, then use the handles to rotate and resize</p>
@@ -402,6 +442,7 @@ export default function KonvaShowcase() {
           <p className="example-note">
             Preview export is at 1x scale (web quality), Print export is at 3x scale (high resolution)
           </p>
+        </div>
         </div>
       </section>
 
