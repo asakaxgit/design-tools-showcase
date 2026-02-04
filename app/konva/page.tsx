@@ -108,7 +108,7 @@ export default function KonvaShowcase() {
         <div className="example">
           <h3>3. Rotation & Animation</h3>
           <p>Click the star to rotate it</p>
-          <div className="canvas-container">
+          <div className="canvas-container clickable">
             <Stage width={600} height={300}>
               <Layer>
                 <Star
@@ -121,7 +121,6 @@ export default function KonvaShowcase() {
                   shadowBlur={10}
                   rotation={starRotation}
                   onClick={() => setStarRotation(starRotation + 45)}
-                  style={{ cursor: 'pointer' }}
                 />
               </Layer>
             </Stage>

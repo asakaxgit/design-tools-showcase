@@ -203,6 +203,10 @@ section h2 {
   display: inline-block;
 }
 
+.canvas-container.clickable {
+  cursor: pointer;
+}
+
 .example-note {
   font-size: 0.9rem;
   color: #718096;
