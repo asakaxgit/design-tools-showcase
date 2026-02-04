@@ -12,7 +12,7 @@ The second example in a row overflows its container since we changed the layout 
 **Acceptance Criteria:**
 - [x] Canvas containers should be responsive and not overflow in 2-column grid layout
 - [x] Add `max-width: 100%` and `overflow: auto` to `.canvas-container` class
-- [ ] Test on various screen sizes to ensure proper display
+- [x] Test on various screen sizes to ensure proper display
 
 **Priority:** High (Bug fix)
 
