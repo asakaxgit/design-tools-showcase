@@ -407,3 +407,19 @@ section h2 {
   font-weight: 500;
 }
 
+/* JSON Export Output */
+.json-output {
+  background: #1a202c;
+  color: #68d391;
+  padding: 1rem;
+  border-radius: 8px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  overflow: auto;
+  max-height: 400px;
+  white-space: pre;
+  margin-top: 1rem;
+  border: 1px solid #2d3748;
+}
+

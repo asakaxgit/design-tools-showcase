@@ -13,6 +13,7 @@ export default function PikasoShowcase() {
   const [ref5, editor5] = usePikaso({ width: 600, height: 300 })
   const [ref6, editor6] = usePikaso({ width: 600, height: 300 })
   const [ref7, editor7] = usePikaso({ width: 600, height: 300 })
+  const [ref8, editor8] = usePikaso({ width: 600, height: 300 })
 
   const [text1, setText1] = useState('Hello from Pikaso!')
   const [text2, setText2] = useState('Styled and positioned text')
