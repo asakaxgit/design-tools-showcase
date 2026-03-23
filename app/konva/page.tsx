@@ -188,37 +188,39 @@ export default function KonvaShowcase() {
           <h3>1. Basic Shapes</h3>
           <p>Rectangle, circle, and star with different colors and properties</p>
           <div className="canvas-container">
-            <Stage width={600} height={300}>
-              <Layer>
-                <Rect
-                  x={50}
-                  y={50}
-                  width={100}
-                  height={80}
-                  fill={rectColor}
-                  shadowBlur={5}
-                  cornerRadius={10}
-                  onMouseEnter={() => setRectColor('#2b6cb0')}
-                  onMouseLeave={() => setRectColor('#4299e1')}
-                />
-                <Circle
-                  x={250}
-                  y={90}
-                  radius={40}
-                  fill="#48bb78"
-                  shadowBlur={5}
-                />
-                <Star
-                  x={400}
-                  y={90}
-                  numPoints={5}
-                  innerRadius={20}
-                  outerRadius={40}
-                  fill="#f6ad55"
-                  shadowBlur={5}
-                />
-              </Layer>
-            </Stage>
+            <div style={{ width: '100%', maxWidth: '600px' }}>
+              <Stage width={600} height={300} style={{ width: '100%', height: 'auto' }}>
+                <Layer>
+                  <Rect
+                    x={50}
+                    y={50}
+                    width={100}
+                    height={80}
+                    fill={rectColor}
+                    shadowBlur={5}
+                    cornerRadius={10}
+                    onMouseEnter={() => setRectColor('#2b6cb0')}
+                    onMouseLeave={() => setRectColor('#4299e1')}
+                  />
+                  <Circle
+                    x={250}
+                    y={90}
+                    radius={40}
+                    fill="#48bb78"
+                    shadowBlur={5}
+                  />
+                  <Star
+                    x={400}
+                    y={90}
+                    numPoints={5}
+                    innerRadius={20}
+                    outerRadius={40}
+                    fill="#f6ad55"
+                    shadowBlur={5}
+                  />
+                </Layer>
+              </Stage>
+            </div>
           </div>
           <p className="example-note">Hover over the blue rectangle to see color change</p>
         </div>
@@ -227,31 +229,33 @@ export default function KonvaShowcase() {
           <h3>2. Draggable Elements</h3>
           <p>Drag the circle to move it around the canvas</p>
           <div className="canvas-container">
-            <Stage width={600} height={300}>
-              <Layer>
-                <Text
-                  text="Drag me!"
-                  x={circlePos.x - 30}
-                  y={circlePos.y - 60}
-                  fontSize={16}
-                  fill="#2d3748"
-                />
-                <Circle
-                  x={circlePos.x}
-                  y={circlePos.y}
-                  radius={50}
-                  fill="#9f7aea"
-                  shadowBlur={10}
-                  draggable
-                  onDragEnd={(e) => {
-                    setCirclePos({
-                      x: e.target.x(),
-                      y: e.target.y(),
-                    })
-                  }}
-                />
-              </Layer>
-            </Stage>
+            <div style={{ width: '100%', maxWidth: '600px' }}>
+              <Stage width={600} height={300} style={{ width: '100%', height: 'auto' }}>
+                <Layer>
+                  <Text
+                    text="Drag me!"
+                    x={circlePos.x - 30}
+                    y={circlePos.y - 60}
+                    fontSize={16}
+                    fill="#2d3748"
+                  />
+                  <Circle
+                    x={circlePos.x}
+                    y={circlePos.y}
+                    radius={50}
+                    fill="#9f7aea"
+                    shadowBlur={10}
+                    draggable
+                    onDragEnd={(e) => {
+                      setCirclePos({
+                        x: e.target.x(),
+                        y: e.target.y(),
+                      })
+                    }}
+                  />
+                </Layer>
+              </Stage>
+            </div>
           </div>
         </div>
 
@@ -259,22 +263,24 @@ export default function KonvaShowcase() {
           <h3>3. Rotation & Animation</h3>
           <p>Click the star to rotate it</p>
           <div className="canvas-container clickable">
-            <Stage width={600} height={300}>
-              <Layer>
-                <Star
-                  x={300}
-                  y={150}
-                  numPoints={6}
-                  innerRadius={40}
-                  outerRadius={70}
-                  fill="#ed8936"
-                  shadowBlur={10}
-                  rotation={starRotation}
-                  onClick={() => setStarRotation(prev => prev + 45)}
-                  onTap={() => setStarRotation(prev => prev + 45)}
-                />
-              </Layer>
-            </Stage>
+            <div style={{ width: '100%', maxWidth: '600px' }}>
+              <Stage width={600} height={300} style={{ width: '100%', height: 'auto' }}>
+                <Layer>
+                  <Star
+                    x={300}
+                    y={150}
+                    numPoints={6}
+                    innerRadius={40}
+                    outerRadius={70}
+                    fill="#ed8936"
+                    shadowBlur={10}
+                    rotation={starRotation}
+                    onClick={() => setStarRotation(prev => prev + 45)}
+                    onTap={() => setStarRotation(prev => prev + 45)}
+                  />
+                </Layer>
+              </Stage>
+            </div>
           </div>
           <p className="example-note">Current rotation: {starRotation}°</p>
         </div>
@@ -305,26 +311,28 @@ export default function KonvaShowcase() {
             </div>
           </div>
           <div className="canvas-container">
-            <Stage width={600} height={200}>
-              <Layer>
-                <Text
-                  text={text1}
-                  x={50}
-                  y={50}
-                  fontSize={32}
-                  fontFamily="Arial"
-                  fill="#2d3748"
-                />
-                <Text
-                  text={text2}
-                  x={50}
-                  y={100}
-                  fontSize={18}
-                  fontStyle="italic"
-                  fill="#4299e1"
-                />
-              </Layer>
-            </Stage>
+            <div style={{ width: '100%', maxWidth: '600px' }}>
+              <Stage width={600} height={200} style={{ width: '100%', height: 'auto' }}>
+                <Layer>
+                  <Text
+                    text={text1}
+                    x={50}
+                    y={50}
+                    fontSize={32}
+                    fontFamily="Arial"
+                    fill="#2d3748"
+                  />
+                  <Text
+                    text={text2}
+                    x={50}
+                    y={100}
+                    fontSize={18}
+                    fontStyle="italic"
+                    fill="#4299e1"
+                  />
+                </Layer>
+              </Stage>
+            </div>
           </div>
         </div>
         </div>
@@ -337,27 +345,30 @@ export default function KonvaShowcase() {
           <h3>5. Transform with Handles (Rotate & Resize)</h3>
           <p>Click on a shape to select it, then use the handles to rotate and resize</p>
           <div className="canvas-container">
-            <Stage 
-              width={600} 
-              height={300} 
-              onMouseDown={handleDeselect}
-              onTouchStart={handleDeselect}
-              ref={stageRef}
-            >
-              <Layer>
-                {shapes.map(renderShape)}
-                <Transformer
-                  ref={transformerRef}
-                  boundBoxFunc={(oldBox, newBox) => {
-                    // Limit resize
-                    if (newBox.width < 5 || newBox.height < 5) {
-                      return oldBox
-                    }
-                    return newBox
-                  }}
-                />
-              </Layer>
-            </Stage>
+            <div style={{ width: '100%', maxWidth: '600px' }}>
+              <Stage
+                width={600}
+                height={300}
+                onMouseDown={handleDeselect}
+                onTouchStart={handleDeselect}
+                ref={stageRef}
+                style={{ width: '100%', height: 'auto' }}
+              >
+                <Layer>
+                  {shapes.map(renderShape)}
+                  <Transformer
+                    ref={transformerRef}
+                    boundBoxFunc={(oldBox, newBox) => {
+                      // Limit resize
+                      if (newBox.width < 5 || newBox.height < 5) {
+                        return oldBox
+                      }
+                      return newBox
+                    }}
+                  />
+                </Layer>
+              </Stage>
+            </div>
           </div>
           <p className="example-note">
             {selectedId ? `Selected: ${selectedId}` : 'Click on a shape to select it'}

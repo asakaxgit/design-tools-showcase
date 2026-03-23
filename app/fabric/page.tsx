@@ -467,7 +467,7 @@ export default function FabricShowcase() {
             <h3>1. Basic Shapes</h3>
             <p>Rectangle, circle, and star with different colors and properties</p>
             <div className="canvas-container">
-              <canvas ref={canvas1Ref} />
+              <canvas ref={canvas1Ref} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
             <p className="example-note">Hover over the blue rectangle to see color change</p>
           </div>
@@ -476,7 +476,7 @@ export default function FabricShowcase() {
             <h3>2. Draggable Elements</h3>
             <p>Drag the circle to move it around the canvas</p>
             <div className="canvas-container">
-              <canvas ref={canvas2Ref} />
+              <canvas ref={canvas2Ref} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
           </div>
 
@@ -484,7 +484,7 @@ export default function FabricShowcase() {
             <h3>3. Rotation & Animation</h3>
             <p>Click the star to rotate it</p>
             <div className="canvas-container clickable">
-              <canvas ref={canvas3Ref} />
+              <canvas ref={canvas3Ref} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
             <p className="example-note">Current rotation: {starRotation}°</p>
           </div>
@@ -515,7 +515,7 @@ export default function FabricShowcase() {
               </div>
             </div>
             <div className="canvas-container">
-              <canvas ref={canvas4Ref} />
+              <canvas ref={canvas4Ref} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
           </div>
         </div>
@@ -527,7 +527,7 @@ export default function FabricShowcase() {
             <h3>5. Transform with Handles (Rotate & Resize)</h3>
             <p>Click on a shape to select it, then use the handles to rotate and resize</p>
             <div className="canvas-container">
-              <canvas ref={canvas5Ref} />
+              <canvas ref={canvas5Ref} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
             <p className="example-note">
               {selectedObject ? `Selected object` : 'Click on a shape to select it'}
@@ -570,7 +570,7 @@ export default function FabricShowcase() {
               </div>
             </div>
             <div className="canvas-container">
-              <canvas ref={canvas6Ref} />
+              <canvas ref={canvas6Ref} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
           </div>
 
@@ -588,7 +588,7 @@ export default function FabricShowcase() {
               </button>
             </div>
             <div className="canvas-container">
-              <canvas ref={canvas7Ref} />
+              <canvas ref={canvas7Ref} style={{ maxWidth: '100%', height: 'auto' }} />
             </div>
             <p className="example-note">
               Preview export is at 1x scale (web quality), Print export is at 3x scale (high resolution)
