@@ -11,14 +11,13 @@
   },
   "dependencies": {
     "fabric": "^7.1.0",
-    "konva": "^10.2.0",
+    "konva": "^10.2.3",
     "next": "15.5.11",
     "paper": "^0.12.18",
-    "pikaso": "^2.9.0",
-    "pikaso-react-hook": "^2.1.1",
+    "pikaso": "^3.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-konva": "^19.2.2"
+    "react-konva": "^19.2.3"
   },
   "devDependencies": {
     "@types/fabric": "^5.3.11",

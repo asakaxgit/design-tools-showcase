@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import usePikaso from 'pikaso-react-hook'
+import usePikaso from './usePikaso'
 
 export default function PikasoShowcase() {
   // One hook call per example — each returns [containerRef, editorInstance]
@@ -417,7 +417,7 @@ export default function PikasoShowcase() {
           <div className="eval-item">
             <h3>Integration</h3>
             <div className="rating">★★★★☆</div>
-            <p>Works seamlessly with Next.js via the official <code>usePikaso</code> React hook. Full TypeScript support. No SSR support (client-side only).</p>
+            <p>Works seamlessly with Next.js via a local <code>usePikaso</code> hook built directly on the Pikaso v3 API. Full TypeScript support. No SSR support (client-side only).</p>
           </div>
         </div>
       </section>
