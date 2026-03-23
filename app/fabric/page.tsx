@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { Canvas, Rect, Circle, Polygon, Text, Shadow, FabricObject } from 'fabric'
+import { Canvas, Rect, Circle, Polygon, Text, Shadow, FabricObject, FabricImage } from 'fabric'
 
 interface Shape {
   id: string
@@ -18,6 +18,7 @@ export default function FabricShowcase() {
   const canvas5Ref = useRef<HTMLCanvasElement>(null)
   const canvas6Ref = useRef<HTMLCanvasElement>(null)
   const canvas7Ref = useRef<HTMLCanvasElement>(null)
+  const canvas8Ref = useRef<HTMLCanvasElement>(null)
 
   // Fabric canvas instances
   const fabricCanvas1 = useRef<Canvas | null>(null)
@@ -27,6 +28,7 @@ export default function FabricShowcase() {
   const fabricCanvas5 = useRef<Canvas | null>(null)
   const fabricCanvas6 = useRef<Canvas | null>(null)
   const fabricCanvas7 = useRef<Canvas | null>(null)
+  const fabricCanvas8 = useRef<Canvas | null>(null)
 
   const [rectColor, setRectColor] = useState('#4299e1')
   const [circlePos, setCirclePos] = useState({ x: 100, y: 200 })
@@ -34,6 +36,7 @@ export default function FabricShowcase() {
   const [text1, setText1] = useState('Hello from Fabric.js!')
   const [text2, setText2] = useState('Styled and positioned text')
   const [selectedObject, setSelectedObject] = useState<FabricObject | null>(null)
+  const [fabricJson, setFabricJson] = useState<string | null>(null)
 
   // Example 1: Basic Shapes
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -428,6 +431,66 @@ export default function FabricShowcase() {
     }
   }
 
+  // Example 8: JSON Export
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!canvas8Ref.current) return
+
+    const canvas = new Canvas(canvas8Ref.current, {
+      width: 600,
+      height: 300,
+      backgroundColor: '#ffffff',
+      selection: false
+    })
+    fabricCanvas8.current = canvas
+
+    const rect = new Rect({
+      left: 50,
+      top: 50,
+      width: 120,
+      height: 80,
+      fill: '#4299e1',
+      rx: 8,
+      ry: 8,
+      selectable: false
+    })
+    const circle = new Circle({
+      left: 240,
+      top: 90,
+      radius: 45,
+      fill: '#48bb78',
+      originX: 'center',
+      originY: 'center',
+      selectable: false
+    })
+    const label = new Text('JSON Export Example', {
+      left: 50,
+      top: 170,
+      fontSize: 20,
+      fill: '#2d3748',
+      selectable: false
+    })
+    canvas.add(rect, circle, label)
+
+    FabricImage.fromURL('https://placehold.co/150x100/4299e1/white?text=Image', { crossOrigin: 'anonymous' })
+      .then((img) => {
+        img.set({ left: 370, top: 40, selectable: false })
+        canvas.add(img)
+        canvas.renderAll()
+      })
+
+    canvas.renderAll()
+
+    return () => {
+      canvas.dispose()
+    }
+  }, [])
+
+  const exportJsonFabric = () => {
+    if (!fabricCanvas8.current) return
+    setFabricJson(JSON.stringify(fabricCanvas8.current.toJSON(), null, 2))
+  }
+
   const downloadImage = (dataURL: string, filename: string) => {
     const link = document.createElement('a')
     link.download = filename
@@ -592,6 +655,26 @@ export default function FabricShowcase() {
             </div>
             <p className="example-note">
               Preview export is at 1x scale (web quality), Print export is at 3x scale (high resolution)
+            </p>
+          </div>
+
+          <div className="example">
+            <h3>8. Export Canvas as JSON</h3>
+            <p>Dump the full canvas state to JSON, including shapes and image URLs</p>
+            <div className="canvas-container">
+              <canvas ref={canvas8Ref} style={{ maxWidth: '100%', height: 'auto' }} />
+            </div>
+            <div className="export-controls">
+              <button className="export-button preview" onClick={exportJsonFabric}>
+                📋 Export as JSON
+                <span className="button-subtitle">Serialize canvas state to JSON</span>
+              </button>
+            </div>
+            {fabricJson && (
+              <pre className="json-output">{fabricJson}</pre>
+            )}
+            <p className="example-note">
+              Fabric.js natively includes image src URLs in the exported JSON
             </p>
           </div>
         </div>

@@ -12,6 +12,7 @@ export default function PaperShowcase() {
     canvas5: useRef<HTMLCanvasElement>(null),
     canvas6: useRef<HTMLCanvasElement>(null),
     canvas7: useRef<HTMLCanvasElement>(null),
+    canvas8: useRef<HTMLCanvasElement>(null),
   }
 
   const [rectColor, setRectColor] = useState('#4299e1')
@@ -23,6 +24,8 @@ export default function PaperShowcase() {
   const [paperLoaded, setPaperLoaded] = useState(false)
   const paperRef = useRef<any>(null)
   const projectsRef = useRef<any[]>([])
+  const project8Ref = useRef<any>(null)
+  const [paperJson, setPaperJson] = useState<string | null>(null)
 
   // Load Paper.js dynamically
   useEffect(() => {
@@ -291,6 +294,45 @@ export default function PaperShowcase() {
       project7.view.draw()
     }
 
+    // Example 8: JSON Export with Image
+    if (canvasRefs.canvas8.current) {
+      const project8 = new paper.Project(canvasRefs.canvas8.current)
+      projects.push(project8)
+      project8Ref.current = project8
+      project8.activate()
+
+      new paper.Path.Rectangle({
+        point: [50, 50],
+        size: [120, 80],
+        radius: 8,
+        fillColor: new paper.Color('#4299e1')
+      })
+
+      new paper.Path.Circle({
+        center: [240, 90],
+        radius: 45,
+        fillColor: new paper.Color('#48bb78')
+      })
+
+      new paper.PointText({
+        point: [50, 190],
+        content: 'JSON Export Example',
+        fontSize: 20,
+        fillColor: new paper.Color('#2d3748')
+      })
+
+      const raster = new paper.Raster({
+        source: 'https://placehold.co/150x100/4299e1/white?text=Image',
+        position: new paper.Point(445, 90),
+        crossOrigin: 'anonymous'
+      })
+      raster.onLoad = () => {
+        project8.view.draw()
+      }
+
+      project8.view.draw()
+    }
+
     return () => {
       projects.forEach(project => {
         if (project) {
@@ -354,6 +396,11 @@ export default function PaperShowcase() {
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+  }
+
+  const exportJsonPaper = () => {
+    if (!project8Ref.current) return
+    setPaperJson(project8Ref.current.exportJSON({ asString: true, precision: 2 }))
   }
 
   if (!paperLoaded) {
@@ -522,6 +569,26 @@ export default function PaperShowcase() {
             </div>
             <p className="example-note">
               Preview export is at 1x scale (web quality), Print export is at 3x scale (high resolution)
+            </p>
+          </div>
+
+          <div className="example">
+            <h3>8. Export Canvas as JSON</h3>
+            <p>Dump the full canvas state to JSON, including shapes and an image</p>
+            <div className="canvas-container">
+              <canvas ref={canvasRefs.canvas8} width={600} height={300} style={{ maxWidth: '100%', height: 'auto' }} />
+            </div>
+            <div className="export-controls">
+              <button className="export-button preview" onClick={exportJsonPaper}>
+                📋 Export as JSON
+                <span className="button-subtitle">Serialize canvas state to JSON</span>
+              </button>
+            </div>
+            {paperJson && (
+              <pre className="json-output">{paperJson}</pre>
+            )}
+            <p className="example-note">
+              Paper.js exports vector paths as segment arrays; Raster images are serialised with their source URL
             </p>
           </div>
         </div>

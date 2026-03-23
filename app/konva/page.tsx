@@ -1,6 +1,6 @@
 'use client'
 
-import { Stage, Layer, Rect, Circle, Star, Text, Transformer } from 'react-konva'
+import { Stage, Layer, Rect, Circle, Star, Text, Transformer, Image as KonvaImage } from 'react-konva'
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import Konva from 'konva'
@@ -39,6 +39,19 @@ export default function KonvaShowcase() {
   const transformerRef = useRef<Konva.Transformer>(null)
   const shapeRefs = useRef<{ [key: string]: Konva.Shape }>({})
   const stageRef = useRef<Konva.Stage>(null)
+  const stageRef8 = useRef<Konva.Stage>(null)
+
+  // State for JSON export example
+  const JSON_IMAGE_URL = 'https://placehold.co/150x100/4299e1/white?text=Image'
+  const [konvaJson, setKonvaJson] = useState<string | null>(null)
+  const [jsonImage, setJsonImage] = useState<HTMLImageElement | null>(null)
+
+  useEffect(() => {
+    const img = new window.Image()
+    img.crossOrigin = 'anonymous'
+    img.src = JSON_IMAGE_URL
+    img.onload = () => setJsonImage(img)
+  }, [])
 
   // Update transformer when selection changes
   useEffect(() => {
@@ -126,6 +139,23 @@ export default function KonvaShowcase() {
 
   const exportForPrint = () => {
     exportCanvas(3, 'canvas-print.png')
+  }
+
+  const exportJsonKonva = () => {
+    if (!stageRef8.current) return
+    // Konva.toObject() serialises all node attrs; add 'src' to Image nodes so
+    // the placeholder URL appears in the exported JSON (HTMLImageElement is
+    // not JSON-serialisable by default)
+    const stageObj = stageRef8.current.toObject() as any
+    const layer = stageObj?.children?.[0]
+    if (layer?.children) {
+      for (const node of layer.children as any[]) {
+        if (node.className === 'Image') {
+          node.attrs = { ...node.attrs, src: JSON_IMAGE_URL }
+        }
+      }
+    }
+    setKonvaJson(JSON.stringify(stageObj, null, 2))
   }
 
   const renderShape = (shape: Shape) => {
@@ -440,6 +470,41 @@ export default function KonvaShowcase() {
           </div>
           <p className="example-note">
             Preview export is at 1x scale (web quality), Print export is at 3x scale (high resolution)
+          </p>
+        </div>
+
+        <div className="example">
+          <h3>8. Export Canvas as JSON</h3>
+          <p>Dump the full canvas state to JSON, including shapes and image references</p>
+          <div className="canvas-container">
+            <div style={{ width: '100%', maxWidth: '600px' }}>
+              <Stage width={600} height={300} ref={stageRef8} style={{ width: '100%', height: 'auto' }}>
+                <Layer>
+                  <Rect x={50} y={50} width={120} height={80} fill="#4299e1" cornerRadius={8} />
+                  <Circle x={240} y={90} radius={45} fill="#48bb78" />
+                  <Text x={50} y={170} text="JSON Export Example" fontSize={20} fill="#2d3748" />
+                  <KonvaImage
+                    image={jsonImage ?? undefined}
+                    x={370}
+                    y={40}
+                    width={150}
+                    height={100}
+                  />
+                </Layer>
+              </Stage>
+            </div>
+          </div>
+          <div className="export-controls">
+            <button className="export-button preview" onClick={exportJsonKonva}>
+              📋 Export as JSON
+              <span className="button-subtitle">Serialize canvas state to JSON</span>
+            </button>
+          </div>
+          {konvaJson && (
+            <pre className="json-output">{konvaJson}</pre>
+          )}
+          <p className="example-note">
+            Konva serialises shape attributes to JSON; image src is added as a custom attribute since HTMLImageElement is not JSON-serialisable
           </p>
         </div>
         </div>
