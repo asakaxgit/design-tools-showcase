@@ -39,6 +39,12 @@ export default function Home() {
             <p>Vector graphics scripting framework</p>
             <Link href="/paper" className="card-link">View Showcase →</Link>
           </div>
+
+          <div className="library-card">
+            <h3>Pikaso</h3>
+            <p>Fully-typed canvas library built on top of Konva with higher-level APIs</p>
+            <Link href="/pikaso" className="card-link">View Showcase →</Link>
+          </div>
         </div>
       </section>
 
