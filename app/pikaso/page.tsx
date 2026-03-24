@@ -21,6 +21,7 @@ export default function PikasoShowcase() {
   const [layerOrder, setLayerOrder] = useState<string[]>([])
   const [canUndo, setCanUndo] = useState(false)
   const [canRedo, setCanRedo] = useState(false)
+  const [pikasoJson, setPikasoJson] = useState<string | null>(null)
 
   // Example 1: Basic Shapes
   useEffect(() => {
@@ -211,6 +212,28 @@ export default function PikasoShowcase() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor7])
 
+  // Example 8: JSON Export
+  useEffect(() => {
+    if (!editor8) return
+
+    editor8.shapes.rect.insert({
+      x: 50, y: 50, width: 120, height: 80,
+      fill: '#4299e1', cornerRadius: 8,
+    })
+    editor8.shapes.circle.insert({
+      x: 240, y: 90, radius: 45, fill: '#48bb78',
+    })
+    editor8.shapes.text.insert({
+      x: 50, y: 170, text: 'JSON Export Example', fontSize: 20, fill: '#2d3748',
+    })
+
+    // Add an image with a placeholder URL
+    editor8.shapes.image.insert('https://placehold.co/150x100/4299e1/white?text=Image', {
+      x: 370, y: 40,
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor8])
+
   const handleUndo = () => {
     editor6?.undo()
   }
@@ -236,6 +259,12 @@ export default function PikasoShowcase() {
   const exportForPrint = () => {
     if (!editor7) return
     downloadImage(editor7.export.toImage({ pixelRatio: 3 }), 'pikaso-print.png')
+  }
+
+  const exportJsonPikaso = () => {
+    if (!editor8) return
+    const jsonData = editor8.export.toJson()
+    setPikasoJson(JSON.stringify(jsonData, null, 2))
   }
 
   return (
@@ -388,6 +417,26 @@ export default function PikasoShowcase() {
             </div>
             <p className="example-note">
               Preview export is at 1x scale (web quality), Print export is at 3x scale (high resolution)
+            </p>
+          </div>
+
+          <div className="example">
+            <h3>8. Export Canvas as JSON</h3>
+            <p>Dump the full canvas state to JSON, including shapes and image URLs</p>
+            <div className="canvas-container">
+              <div ref={ref8} style={{ width: 600, height: 300 }} />
+            </div>
+            <div className="export-controls">
+              <button className="export-button preview" onClick={exportJsonPikaso}>
+                📋 Export as JSON
+                <span className="button-subtitle">Serialize canvas state to JSON</span>
+              </button>
+            </div>
+            {pikasoJson && (
+              <pre className="json-output">{pikasoJson}</pre>
+            )}
+            <p className="example-note">
+              Pikaso serializes all shapes, including image source URLs, into a structured JSON format
             </p>
           </div>
         </div>
